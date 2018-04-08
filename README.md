@@ -34,10 +34,10 @@ const api = new RoyalRoadAPI();
 ## FictionService
 
 All methods of the FictionService return a Promise resolving to a 
-`Fiction`, which is defined as follows: 
+`Fiction`, which looks like this:
 
 ```typescript
-export interface Fiction {
+interface Fiction {
   type: string,
   title: string,
   image: string,
@@ -48,8 +48,13 @@ export interface Fiction {
   stats: FictionStats,
   author: FictionAuthor,
 }
+```
 
-export interface FictionStats {
+FictionStats and FictionAuthor are seperated for readability, and structured 
+as follows.
+
+```typescript
+interface FictionStats {
   pages: number,
   ratings: number,
   favorites: number,
@@ -67,7 +72,7 @@ export interface FictionStats {
   },
 }
 
-export interface FictionAuthor {
+interface FictionAuthor {
   id: number,
   name: string,
   title: string,
@@ -75,29 +80,41 @@ export interface FictionAuthor {
 }
 ```
 
-#### getFiction(id: number): Promise(Fiction)
+All scores are accurate to two decimal places, and range from 0 to 1. The ID 
+of an author can be used to get their profile URL by inserting it into 
+`royalroadl.com/profile/${id}`.
 
-Returns the fiction at `royalroadl.com/fiction/${id}`. 
+### Methods
 
-#### getRandom(): Promise(Fiction)
+_A note for those unfamiliar with typescripts syntax, Promise\<Fiction\> describes 
+a Promise, resolving to a `Fiction`._
 
-Equivalent to `royalroadl.com/fiction/random`, AKA 'Surprise me!'.
+- `getFiction(id: number): Promise<Fiction>` - returns the fiction at `royalroadl.com/fiction/${id}`.
+- `getRandom(): Promise<Fiction>` - equivalent of `royalroadl.com/fiction/random`, AKA 'Surprise me!'.
 
 ## FictionsService
 
-All methods return a Promise resolving to an extension of `FictionBlurb`, 
-depending on the enpoint used.
+Most methods of this service return a Promise resolving to some extension of 
+`FictionBlurb`, which contains the overlapping information provided by the 
+active-popular, latest-updates, and best-rated pages.
 
 ```typescript
-export interface FictionBlurb {
+interface FictionBlurb {
   id: number,
   type: string,
   title: string,
   image: string,
   tags: string[],
 }
+```
 
-export interface LatestBlurb extends FictionBlurb {
+Here, type is one of 'Original' or 'Fanfiction'.
+
+Since all individual pages have their own set of extra information, they all have a 
+fitting interface which extends the common base.
+
+```typescript
+interface LatestBlurb extends FictionBlurb {
   latest: {
     name: string,
     link: string,
@@ -105,7 +122,7 @@ export interface LatestBlurb extends FictionBlurb {
   }[],
 }
 
-export interface PopularBlurb extends FictionBlurb {
+interface PopularBlurb extends FictionBlurb {
   description: string,
   stats: {
     pages: number,
@@ -116,9 +133,20 @@ export interface PopularBlurb extends FictionBlurb {
   },
 }
 
-export interface BestBlurb extends PopularBlurb {}
+interface BestBlurb extends PopularBlurb {}
+```
 
-export interface SearchBlurb {
+Since the best-rated and active-popular pages have the same format, the same interface 
+structure is used.
+
+Note that the rating returned here is significantly more accurate than those 
+in `Fiction`.
+
+The `search` method returns a more limited set of information, which does not 
+extend the `FictionBlurb` common base. It is described as
+
+```typescript
+interface SearchBlurb {
   id: number,
   pages: number,
   title: string,
@@ -128,24 +156,11 @@ export interface SearchBlurb {
 }
 ```
 
-#### getLatest(page: number = 1): Promise(LatestBlurb)
+### Methods
 
-Returns the 20 fiction blurbs as they appear on 
-`royalroadl.com/fictions/latest-updates?page=${page}`.
+_For those unfamiliar with ES6 default parameters, read more (on MDN)[https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Default_parameters]._
 
-#### getPopular(page: number = 1): Promise(PopularBlurb)
-
-Returns the 20 fiction blurbs as they appear on 
-`royalroadl.com/fictions/active-popular?page=${page}`.
-
-Note that the average rating here is a lot more precise than the one in `Fiction`. 
-
-#### getBest(page: number = 1): Promise(bestBlurb)
-
-Returns the 20 fiction blurbs as they appear on 
-`royalroadl.com/fictions/best-rated?page=${page}`.
-
-#### search(keyword: string, page: number = 1): Promise(SearchBlurb)
-
-Returns the 20 fiction blurbs as they appear on 
-`royalroadl.com/fictions/search?keyword=${keyword}&page=${page}`.
+- `getLatest(page: number = 1): Promise<LatestBlurb>`
+- `getPopular(page: number = 1): Promise<PopularBlurb>`
+- `getBest(page: number = 1): Promise<BestBlurb>`
+- `search(keyword: string, page: number = 1): Promise<SearchBlurb>`
