@@ -75,11 +75,11 @@ export interface FictionAuthor {
 }
 ```
 
-### getFiction(id: number): Promise(Fiction)
+#### getFiction(id: number): Promise(Fiction)
 
 Returns the fiction at `royalroadl.com/fiction/${id}`. 
 
-### getRandom(): Promise(Fiction)
+#### getRandom(): Promise(Fiction)
 
 Equivalent to `royalroadl.com/fiction/random`, AKA 'Surprise me!'.
 
@@ -128,24 +128,24 @@ export interface SearchBlurb {
 }
 ```
 
-### getLatest(page: number = 1): Promise(LatestBlurb)
+#### getLatest(page: number = 1): Promise(LatestBlurb)
 
 Returns the 20 fiction blurbs as they appear on 
 `royalroadl.com/fictions/latest-updates?page=${page}`.
 
-### getPopular(page: number = 1): Promise(PopularBlurb)
+#### getPopular(page: number = 1): Promise(PopularBlurb)
 
 Returns the 20 fiction blurbs as they appear on 
 `royalroadl.com/fictions/active-popular?page=${page}`.
 
 Note that the average rating here is a lot more precise than the one in `Fiction`. 
 
-### getBest(page: number = 1): Promise(bestBlurb)
+#### getBest(page: number = 1): Promise(bestBlurb)
 
 Returns the 20 fiction blurbs as they appear on 
 `royalroadl.com/fictions/best-rated?page=${page}`.
 
-### search(keyword: string, page: number = 1): Promise(SearchBlurb)
+#### search(keyword: string, page: number = 1): Promise(SearchBlurb)
 
 Returns the 20 fiction blurbs as they appear on 
 `royalroadl.com/fictions/search?keyword=${keyword}&page=${page}`.
