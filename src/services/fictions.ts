@@ -40,8 +40,10 @@ export class FictionsService {
     return FictionsParser.parsePopular(body) as BestBlurb[];
   }
 
-  public async search(keyword: string): Promise<SearchBlurb[]> {
-    const params = new URLSearchParams({ keyword });
+  public async search(
+    keyword: string, page: number = 1
+  ): Promise<SearchBlurb[]> {
+    const params = new URLSearchParams({ keyword, page: page.toString() });
     const url = `${getBaseAddress()}/fictions/search?${params}`;
 
     const { body } = await get(url);
