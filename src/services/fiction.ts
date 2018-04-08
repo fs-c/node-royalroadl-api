@@ -25,11 +25,11 @@ export class FictionService {
 class FictionParser {
   public static parseFiction(html: string): Fiction {
     const $ = cheerio.load(html);
-
+    
     const title = $('div.fic-title').children('h1').text();
+    const image = $('cover-' + title).attr('src');
     const type = $('span.bg-blue-hoki').eq(0).text();
     const status = $('span.bg-blue-hoki').eq(1).text();
-    const image = $('cover-' + title).attr('src');
 
     const tags = $('span.tags').find('span.label')
       .map((i, el) => $(el).text()).get();
@@ -65,10 +65,10 @@ class FictionParser {
       el.find('span').data('content'); 
 
     const stats: FictionStats = {
+      pages: parseNumber($(statsList).eq(11).text()),
+      ratings: parseNumber($(statsList).eq(9).text()),
       followers: parseNumber($(statsList).eq(5).text()),
       favorites: parseNumber($(statsList).eq(7).text()),
-      ratings: parseNumber($(statsList).eq(9).text()),
-      pages: parseNumber($(statsList).eq(11).text()),
       views: {
         total: parseNumber($(statsList).eq(1).text()),
         average: parseNumber($(statsList).eq(3).text()),
