@@ -50,7 +50,7 @@ interface Fiction {
 }
 ```
 
-FictionStats and FictionAuthor are seperated for readability, and structured 
+`FictionStats` and `FictionAuthor` are seperated for readability, and structured 
 as follows.
 
 ```typescript
@@ -80,7 +80,7 @@ interface FictionAuthor {
 }
 ```
 
-All scores are accurate to two decimal places, and range from 0 to 1. The ID 
+All scores are accurate to two decimal places, and range from 0 to 5. The ID 
 of an author can be used to get their profile URL by inserting it into 
 `royalroadl.com/profile/${id}`.
 
@@ -158,7 +158,7 @@ interface SearchBlurb {
 
 ### Methods
 
-_For those unfamiliar with ES6 default parameters, read more (on MDN)[https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Default_parameters]._
+_For those unfamiliar with ES6 default parameters, read more [on MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Default_parameters)._
 
 - `getLatest(page: number = 1): Promise<LatestBlurb>`
 - `getPopular(page: number = 1): Promise<PopularBlurb>`
