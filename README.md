@@ -28,8 +28,8 @@ const api = new RoyalRoadAPI();
 
 ## Properties
 
-- `fiction` - an instance of the [FictionService](#FictionService).
-- `fictions` - an instance of the [FictionsService](#FictionsService).
+- `fiction` - an instance of the [FictionService](#fictionservice).
+- `fictions` - an instance of the [FictionsService](#fictionsservice).
 
 ## FictionService
 
