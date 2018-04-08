@@ -91,7 +91,7 @@ depending on the enpoint used.
 ```typescript
 export interface FictionBlurb {
   id: number,
-  type: string,             // One of 'Original' or 'Fanfiction'.
+  type: string,
   title: string,
   image: string,
   tags: string[],
