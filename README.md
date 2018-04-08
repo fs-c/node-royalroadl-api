@@ -85,7 +85,7 @@ Equivalent to `royalroadl.com/fiction/random`, AKA 'Surprise me!'.
 
 ## FictionsService
 
-All methods return a promise resolving to an extension of `FictionBlurb`, 
+All methods return a Promise resolving to an extension of `FictionBlurb`, 
 depending on the enpoint used.
 
 ```typescript
