@@ -1,5 +1,5 @@
 import { get } from 'got';
-import * as date from 'date.js'; // TODO: DANGEROUS, needs declaration.
+import  date = require('date.js');
 import * as cheerio from 'cheerio';
 import { URLSearchParams } from 'url';
 import { getBaseAddress } from '../constants';
