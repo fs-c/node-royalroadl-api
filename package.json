@@ -1,6 +1,6 @@
 {
   "name": "royalroadl-api",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Minimal Node.js royalroadl API.",
   "main": "dist/lib.js",
   "scripts": {
