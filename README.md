@@ -1,13 +1,10 @@
 # node-royalroadl-api
 
-A small, __unofficial__ fiction data API for [roalroadl.com](https://royalroadl.com), 
-written in TypeScript.
+A small, __unofficial__ fiction data API for [royalroadl.com](https://royalroadl.com), written in TypeScript.
 
-All HTML is parsed using [cheerio](https://github.com/cheeriojs/cheerio), relative 
-dates are converted to absolute ones using [date.js](https://github.com/matthewmueller/date).
+All HTML is parsed using [cheerio](https://github.com/cheeriojs/cheerio), relative dates are converted to absolute ones using [date.js](https://github.com/matthewmueller/date).
 
-This __will__ break in the future as the public pages are subject to change at any time, 
-but since cheerio is very forgiving it is likely that parts will remain functional.
+This __will__ break in the future as the public pages are subject to change at any time and without notice, but since the parser is very forgiving it is likely that parts will remain functional.
 
 ```
 npm i -s node-royalroadl-api
@@ -33,8 +30,7 @@ const api = new RoyalRoadAPI();
 
 ## FictionService
 
-All methods of the FictionService return a Promise resolving to a 
-`Fiction`, which looks like this:
+All methods of the FictionService return a Promise resolving to a `Fiction`.
 
 ```typescript
 interface Fiction {
@@ -50,8 +46,7 @@ interface Fiction {
 }
 ```
 
-`FictionStats` and `FictionAuthor` are seperated for readability, and structured 
-as follows.
+`FictionStats` and `FictionAuthor` are seperated for readability, and structured as follows.
 
 ```typescript
 interface FictionStats {
@@ -80,23 +75,18 @@ interface FictionAuthor {
 }
 ```
 
-All scores are accurate to two decimal places, and range from 0 to 5. The ID 
-of an author can be used to get their profile URL by inserting it into 
-`royalroadl.com/profile/${id}`.
+All scores are accurate to two decimal places, and range from 0 to 5. The ID of an author can be used to get their profile URL by inserting it into `royalroadl.com/profile/${id}`.
 
 ### Methods
 
-_A note for those unfamiliar with typescripts syntax, Promise\<Fiction\> describes 
-a Promise, resolving to a `Fiction`._
+_A note for those unfamiliar with typescripts syntax: Promise\<Fiction\> describes a Promise resolving to a `Fiction`._
 
 - `getFiction(id: number): Promise<Fiction>` - returns the fiction at `royalroadl.com/fiction/${id}`.
 - `getRandom(): Promise<Fiction>` - equivalent of `royalroadl.com/fiction/random`, AKA 'Surprise me!'.
 
 ## FictionsService
 
-Most methods of this service return a Promise resolving to some extension of 
-`FictionBlurb`, which contains the overlapping information provided by the 
-active-popular, latest-updates, and best-rated pages.
+Most methods of this service return a Promise resolving to some extension of `FictionBlurb`, which contains the overlapping information provided by the active-popular, latest-updates, and best-rated pages.
 
 ```typescript
 interface FictionBlurb {
@@ -108,10 +98,9 @@ interface FictionBlurb {
 }
 ```
 
-Here, type is one of 'Original' or 'Fanfiction'.
+Note that `royalradl.com/fiction/${id}` will redirect to the full fiction page.
 
-Since all individual pages have their own set of extra information, they all have a 
-fitting interface which extends the common base.
+Since all individual pages have their own set of extra information, they all have a fitting interface which extends the common base.
 
 ```typescript
 interface LatestBlurb extends FictionBlurb {
@@ -136,14 +125,11 @@ interface PopularBlurb extends FictionBlurb {
 interface BestBlurb extends PopularBlurb {}
 ```
 
-Since the best-rated and active-popular pages have the same format, the same interface 
-structure is used.
+As the best-rated and active-popular pages have the same format, the same interface structure is used.
 
-Note that the rating returned here is significantly more accurate than those 
-in `Fiction`.
+Note that the rating returned here is significantly more accurate than those in `Fiction`.
 
-The `search` method returns a more limited set of information, which does not 
-extend the `FictionBlurb` common base. It is described as
+The `search` method returns a more limited set of information, which does not extend the `FictionBlurb` common base. It is described as
 
 ```typescript
 interface SearchBlurb {
@@ -160,7 +146,7 @@ interface SearchBlurb {
 
 _For those unfamiliar with ES6 default parameters, read more [on MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Default_parameters)._
 
-- `getLatest(page: number = 1): Promise<LatestBlurb>`
-- `getPopular(page: number = 1): Promise<PopularBlurb>`
-- `getBest(page: number = 1): Promise<BestBlurb>`
-- `search(keyword: string, page: number = 1): Promise<SearchBlurb>`
+- `getLatest(page: number = 1): Promise<LatestBlurb>` - from [/fictions/latest-updates](http://royalroadl.com/fictions/latest-updates)
+- `getPopular(page: number = 1): Promise<PopularBlurb>` - from [/fictions/active-popular](http://royalroadl.com/fictions/active-popular)
+- `getBest(page: number = 1): Promise<BestBlurb>` - from [/fictions/best-rated](http://royalroadl.com/fictions/best-rated)
+- `search(keyword: string, page: number = 1): Promise<SearchBlurb>` - from [/fictions/search](http://royalroadl.com/fictions/search)
