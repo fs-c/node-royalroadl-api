@@ -25,7 +25,7 @@ export class FictionService {
 class FictionParser {
   public static parseFiction(html: string): Fiction {
     const $ = cheerio.load(html);
-    
+
     const title = $('div.fic-title').children('h1').text();
     const image = $('cover-' + title).attr('src');
     const type = $('span.bg-blue-hoki').eq(0).text();
@@ -39,8 +39,8 @@ class FictionParser {
 
     const description = $('div.hidden-content').find('p')
       .map((i, el) => $(el).text()).get().join('');
-    
-    const authorEl = $('.portlet-body').eq(0);  
+
+    const authorEl = $('.portlet-body').eq(0);
 
     const author: FictionAuthor = {
       name: $(authorEl).find('.mt-card-name').find('a').text(),
@@ -49,7 +49,7 @@ class FictionParser {
       id: parseInt(
         $(authorEl).find('.mt-card-name').find('a').attr('href')
           .split('/')[2]
-        , 10
+        , 10,
       ),
     };
 
@@ -62,7 +62,7 @@ class FictionParser {
     const parseRating = (raw: string) =>
       parseFloat(raw.split('/')[0].trim());
     const getContent = (el: Cheerio) =>
-      el.find('span').data('content'); 
+      el.find('span').data('content');
 
     const stats: FictionStats = {
       pages: parseNumber($(statsList).eq(11).text()),
@@ -78,11 +78,11 @@ class FictionParser {
         story: parseRating(getContent($(ratingList).eq(5))),
         grammar: parseRating(getContent($(ratingList).eq(9))),
         overall: parseRating(getContent($(ratingList).eq(1))),
-        character: parseRating(getContent($(ratingList).eq(7))),        
-      }
-    }
+        character: parseRating(getContent($(ratingList).eq(7))),
+      },
+    };
 
-    return { type, tags, stats, title, image, status, 
+    return { type, tags, stats, title, image, status,
       author, warnings, description };
   }
 }

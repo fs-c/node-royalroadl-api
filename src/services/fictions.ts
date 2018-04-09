@@ -9,7 +9,7 @@ import {
   SearchBlurb,
   LatestBlurb,
   FictionBlurb,
-  PopularBlurb
+  PopularBlurb,
 } from '../common-types';
 
 export class FictionsService {
@@ -41,7 +41,7 @@ export class FictionsService {
   }
 
   public async search(
-    keyword: string, page: number = 1
+    keyword: string, page: number = 1,
   ): Promise<SearchBlurb[]> {
     const params = new URLSearchParams({ keyword, page: page.toString() });
     const url = `${getBaseAddress()}/fictions/search?${params}`;
@@ -53,76 +53,60 @@ export class FictionsService {
 }
 
 class FictionsParser {
-  private static parseBlurb(
-    $: CheerioStatic, el: CheerioElement
-  ): FictionBlurb {
-    const titleEl = $(el).find('.fiction-title').children('a');
-
-    const title = $(titleEl).text();
-    const image = $(el).find('img').attr('src');
-    const type = $(el).find('span.label.bg-blue-hoki').text();
-    const id = parseInt($(titleEl).attr('href').split('/')[2], 10);
-
-    const tags = $(el).find('span.label.bg-blue-dark')
-      .map((i, el) => $(el).text()).get();
-
-    return { id, type, tags, title, image };
-  }
-
-  static parseLatest(html: string): LatestBlurb[] {
+  public static parseLatest(html: string): LatestBlurb[] {
     const $ = cheerio.load(html);
 
-    let fictions: LatestBlurb[] = [];
+    const fictions: LatestBlurb[] = [];
 
-    // Using .each instead of the more concise .map because the typings are 
+    // Using .each instead of the more concise .map because the typings are
     // suboptimal. (TODO, maybe)
     $('.fiction-list-item').each((i, el) => {
-      let latest: {
+      const latest: {
         name: string,
         link: string,
         created: number,
       }[] = [];
 
-      $(el).find('li.list-item').each((i, el) => {
+      $(el).find('li.list-item').each((j, item) => {
         latest.push({
-          link: $(el).find('a').attr('href'),
-          name: $(el).find('span.col-xs-8').text(),
-          created: (date($(el).find('time').text()) as Date).getTime(),          
+          link: $(item).find('a').attr('href'),
+          name: $(item).find('span.col-xs-8').text(),
+          created: (date($(item).find('time').text()) as Date).getTime(),
         });
       });
 
       fictions.push(Object.assign(
         FictionsParser.parseBlurb($, el),
-        { latest }
+        { latest },
       ));
     });
 
     return fictions;
   }
 
-  static parsePopular(html: string): PopularBlurb[] {
+  public static parsePopular(html: string): PopularBlurb[] {
     const $ = cheerio.load(html);
 
-    let fictions: PopularBlurb[] = [];
+    const fictions: PopularBlurb[] = [];
 
-    // Using .each instead of the more concise .map because the typings are 
+    // Using .each instead of the more concise .map because the typings are
     // suboptimal. (TODO, maybe)
     $('.fiction-list-item').each((i, el) => {
       let description = '';
 
       // Sigh...
-      $(el).find('.margin-top-10.col-xs-12').find('p').each((i, el) => {
-        description += $(el).text() + '\n';
+      $(el).find('.margin-top-10.col-xs-12').find('p').each((j, para) => {
+        description += $(para).text() + '\n';
       });
 
       // DANGEROUS. But due to RRL site design there's few ways around this.
-      let stats: any = {};
+      const stats: any = {};
 
       stats.latest = date($(el).find('time').attr('datetime')).getTime();
       stats.rating = parseFloat($(el).find('.star').attr('title'));
 
-      $(el).find('span').each((i, el) => {
-        const text = $(el).text().toLowerCase();
+      $(el).find('span').each((j, stat) => {
+        const text = $(stat).text().toLowerCase();
         const key = text.split(' ')[1];
         const value = parseInt(text.split(' ')[0].replace(/,/gi, ''), 10);
 
@@ -134,22 +118,22 @@ class FictionsParser {
       fictions.push(Object.assign(
         FictionsParser.parseBlurb($, el),
         { description },
-        { stats }
+        { stats },
       ));
     });
 
     return fictions;
   }
 
-  static parseSearch(html: string): SearchBlurb[] {
+  public static parseSearch(html: string): SearchBlurb[] {
     const $ = cheerio.load(html);
 
-    let fictions: SearchBlurb[] = [];
+    const fictions: SearchBlurb[] = [];
 
     $('.search-item').each((i, el) => {
       const image = $(el).find('img').attr('src');
 
-      const titleEl = $(el).find('h2.margin-bottom-10').children('a')
+      const titleEl = $(el).find('h2.margin-bottom-10').children('a');
 
       const title = $(titleEl).text();
       const id = parseInt($(titleEl).attr('href').split('/')[2], 10);
@@ -159,13 +143,29 @@ class FictionsParser {
         .replace('by', '').trim();
 
       let description = '';
-      $(el).find('div.fiction-description').find('p').each((i, el) => {
-        description += $(el).text() + '\n';
+      $(el).find('div.fiction-description').find('p').each((j, para) => {
+        description += $(para).text() + '\n';
       });
 
       fictions.push({ id, title, pages, author, image, description });
     });
 
     return fictions;
+  }
+
+  private static parseBlurb(
+    $: CheerioStatic, el: CheerioElement,
+  ): FictionBlurb {
+    const titleEl = $(el).find('.fiction-title').children('a');
+
+    const title = $(titleEl).text();
+    const image = $(el).find('img').attr('src');
+    const type = $(el).find('span.label.bg-blue-hoki').text();
+    const id = parseInt($(titleEl).attr('href').split('/')[2], 10);
+
+    const tags = $(el).find('span.label.bg-blue-dark')
+      .map((i, tag) => $(tag).text()).get();
+
+    return { id, type, tags, title, image };
   }
 }
