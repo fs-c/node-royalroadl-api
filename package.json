@@ -1,7 +1,7 @@
 {
   "name": "royalroadl-api",
-  "version": "0.4.1",
-  "description": "Minimal Node.js royalroadl API.",
+  "version": "0.5.0",
+  "description": "Redacted",
   "main": "dist/lib.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
