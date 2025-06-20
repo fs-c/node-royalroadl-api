@@ -1,1 +1,1 @@
-Can now be found on [gitlab.com/fsoc/royalroadl-api](https://gitlab.com/fsoc/royalroadl-api) and downloaded as a module from [NPM](https://www.npmjs.com/package/@l1lly/royalroadl-api).
+Can now be found on [github.com/fs-c/royalroad-api](https://github.com/fs-c/royalroad-api).
